@@ -13,7 +13,7 @@ Settings
 	spritesheet:icons, 48 by 48, https://i.imgur.com/gwN4y93.png
 	spritesheet:badges, 48 by 48, https://i.imgur.com/H7lDcdV.png
 	spritesheet:bigicons, 256 by 256, https://i.imgur.com/MPAG4pu.png
-	stylesheet:https://raw.githubusercontent.com/G-Raffiti/Element-Clicker/master/game.css
+	stylesheet:https://raw.githubusercontent.com/G-Raffiti/Element-Clicker/master/game_css.txt
 	
 Layout
 	*main
