@@ -10,16 +10,19 @@ Settings
 	background:https://i.imgur.com/EZ4Ek.jpg
 	building gold cost increase:115%
 	building cost refund:50%
-	spritesheet:icons, 48 by 48, https://i.imgur.com/X2ipINx.png
+	spritesheet:icons, 48 by 48, https://i.imgur.com/gwN4y93.png
 	spritesheet:badges, 48 by 48, https://i.imgur.com/H7lDcdV.png
 	spritesheet:bigicons, 256 by 256, https://i.imgur.com/MPAG4pu.png
 	stylesheet:https://pastebin.com/LN3b3tR2
 	
 Layout
 	*main
-		contains:res, goldbuttons, waterbuttons, earthbuttons, firebuttons, airbuttons
+		contains:res, res2, goldbuttons, waterbuttons, earthbuttons, firebuttons, airbuttons
   		*res
-    		contains:tag:resource, tag:special
+    		contains:tag:resource
+    		class:fullWidth
+		*res2
+			contains:tag:special
     		class:fullWidth
   		*goldbuttons
 			contains:tag:gButton
@@ -32,16 +35,14 @@ Layout
 		*earthbuttons
 			contains:tag:eButton
 		*spellbox
-			contains:tag:spelltxt, tag:spell, tag:energietxt
+			contains:tag:spelltxt, tag:spell, tag:Spell
 	*store
   		contains:store2, menuButtons
 		//Menu
 		*menuButtons
-			contains:tag:menuButton
-			no tooltip
 		//tout les Objet qui apparaissent dans les onglet doivent être répertorié ici
  		*store2		
-   	 		contains:tag:statstxt, tag:stats, tag:spetxt, tag:spetxt2, tag:specialisation, tag:upgradetxt, tag:ownedUpgradetxt, tag:upgrade, tag:buildingtxt, tag:basebuilding, tag:spebuilding, tag:transfo, tag:resettxt, tag:reset1, tag:reset2, tag:karmatxt1, tag:karmatxt0, tag:karmatxt2, tag:karmatxt4, tag:karmaupgrade, tag:karmatxt3, tag:karmabuilding, tag:achievtxt, tag:cheattxt, tag:cheat
+   	 		contains:tag:menuButton, tag:statstxt, tag:stats, tag:spetxt, tag:spetxt2, tag:specialisation, tag:upgradetxt, tag:ownedUpgradetxt, tag:upgrade, tag:buildingtxt, tag:basebuilding, tag:spebuilding, tag:transfo, tag:resettxt, tag:reset1, tag:reset2, tag:karmatxt1, tag:karmatxt0, tag:karmatxt2, tag:karmatxt4, tag:karmaupgrade, tag:karmatxt3, tag:karmabuilding, tag:achievtxt, tag:cheattxt, tag:cheat, tag:menuSpell, tag:spellup, tag:autoXtxt, tag:autoXup, tag:acceltxt, tag:accelup, tag:boostXtxt, tag:boostXup
     		tooltip origin:left
 			ps:hide
 	
@@ -49,54 +50,48 @@ Layout
 //Objet de Mise en Page
 Resources 		
 	*TEMPLATE
-		class:noBackground
 	*upgradetxt
 		name:Amélioration disponible
-		tags:upgradetxt view1
+		tags:upgradetxt view1 storetxt
 		text:Amélioration(s) disponible(s) :
 		req:nclick>=7
 	*spetxt
 		name:Spécialisation disponible
-		tags:spetxt view1
+		tags:spetxt view1 storetxt
 		text:Spécialisation disponible :
 		desc:<b>Attention les choix de Spécialisation ne sont pas réversible avant la réincartnation</b>
 		req:(fire:earned>=99) or (water:earned>=99) or (earth:earned>=99) or (air:earned>=99)
 	*ownedUpgradetxt
 		name:Amélioration(s) obtenue(s)
-		tags:ownedUpgradetxt view2
+		tags:ownedUpgradetxt view2 storetxt
 		text:Amélioration(s) obtenue(s) :
 		hidden when 0
 	*spetxt2
 		name:Spécialisation(s) Choisie(s)
-		tags:spetxt2 view2
+		tags:spetxt2 view2 storetxt
 		text:Spécialisation(s) Choisie(s) :
 		hidden when 0
 		desc:<b>Attention les choix de Spécialisation ne sont pas réversible avant la réincartnation</b>
 	*buildingtxt|buildingtxts
 		name:Constructions
-		tags:buildingtxt view1
+		tags:buildingtxt view1 storetxt
 		text:Constructions - [this]
-		is always:(filons+minesa+minesb+watertemples+firetemples+waterstatus+firestatus+earthtemples+earthstatus+transfo+transfo2+transfo3)
+		is always:(filons+minesa+minesb+watertemples+firetemples+waterstatus+firestatus+earthtemples+earthstatus+transfo+transfo2+transfo3+watermagie+firemagie)
 		req:gold:earned>=7
 	*cheattxt
 		name:Cheat
-		tags:cheattxt view2
+		tags:cheattxt view2 storetxt
 		text:Boutons Test
 		desc:Test
 	*statstxt
 		name:Statistiques
-		tags:statstxt view2
+		tags:statstxt view2 storetxt
 		text:Statistiques :
 	*spelltxt
+		class:fullWidth
 		name:Pouvoirs
-		text:Pouvoirs Disponibles :
-		tag:spelltxt
-		req:(energieX>=0) or (waterstatu>=3)
-	*energieX
-		name:Energie
-		text:Energie - [energie] / [maxenergie]
-		desc:Permet d'utiliser les Pouvoirs élémentaires
-		tag:energietxt
+		text:<b>Pouvoirs Disponibles : <#c67aff>[energie][?(maxenergie>=101)|/[maxenergie]| ] </#></b>
+		tags:spelltxt
 		is always:(energie)
 		hidden when 0
 	*TEMPLATE
@@ -113,6 +108,8 @@ Upgrades
 				hide tag:view2
 				hide tag:view3
 				hide tag:view4
+				hide tag:view5
+				show tag:view6
 				show tag:upgrade:notOwned
 				hide tag:upgrade:owned
 				show tag:specialisation:notOwned
@@ -124,6 +121,8 @@ Upgrades
 				hide tag:view2
 				hide tag:view3
 				hide tag:view4
+				hide tag:view5
+				show tag:view6
 				show tag:upgrade:notOwned
 				hide tag:upgrade:owned
 				show tag:specialisation:notOwned
@@ -140,6 +139,8 @@ Upgrades
 				hide tag:view2
 				hide tag:view3
 				hide tag:view4
+				hide tag:view5
+				show tag:view6
 				show tag:upgrade:notOwned
 				hide tag:upgrade:owned
 				show tag:specialisation:notOwned
@@ -152,6 +153,8 @@ Upgrades
 				show tag:view2
 				hide tag:view3
 				hide tag:view4
+				hide tag:view5
+				show tag:view6
 				hide tag:upgrade:notOwned
 				show tag:upgrade:owned
 				hide tag:specialisation:notOwned
@@ -166,6 +169,8 @@ Upgrades
 				hide tag:view2
 				show tag:view3
 				hide tag:view4
+				hide tag:view5
+				show tag:view6
 				hide tag:upgrade
 				hide tag:specialisation
 				hide tag:reset2
@@ -178,9 +183,26 @@ Upgrades
 				hide tag:view2
 				hide tag:view3
 				show tag:view4
+				hide tag:view5
+				show tag:view6
 				hide tag:upgrade
 				hide tag:specialisation
 				hide tag:karmaupgrade:owned
+		end
+	*vew5
+		text:Pouvoir
+		req:(accellvl>=3 or autoXlvl>=3 or boostXlvl>=3)
+		on click:
+				hide tag:view1
+				hide tag:view2
+				hide tag:view3
+				hide tag:view4
+				show tag:view5
+				show tag:view6
+				hide tag:upgrade
+				hide tag:specialisation
+				hide tag:karmaupgrade:owned
+				hide tag:spelltxt2
 		end
 	*TEMPLATE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +229,7 @@ Includes
 					tags:construct [%tag] view1
 // Cette Include permet la création de 10 Upgrades liés à une cinstruiction, à copier :
 //Upgrades  cost1 progressif cost2/3/4/5 *10
-	*include up10 %tag="tagname" %tagbase="upgrade" %name="upgradename" %article="Le/La" %upname="Name on screen" %badge="0" %icon="9,9" %req="gold:earned>=1" %req0="gold:earned>=(1" %target="nobuild" %target1="nobuild" %target2="nobuild" %target3="nobuild" %target4="nobuild" %target5="nobuild" %target6="nobuild" %res1="gold" %res2="gold" %res3="gold" %res4="gold" %res5="gold" %cost1="0" %cost2="0" %cost3="0" %cost4="0" %cost5="0" %desc="Augmente les productions de vos Target" %eff="Production de r1 x f1<.>Production de r2 + f2" %r1="gold" %f1="1" %ra1="gold" %fa1="1" %rb1="gold" %fb1="1" %rc1="gold" %fc1="1" %rd1="gold" %fd1="1" %re1="gold" %fe1="1" %rf1="gold" %ff1="1" %r2="gold" %f2="0" %txt="ownedUpgradetxt"
+	*include up10 %tag="tagname" %tagbase="upgrade" %name="upgradename" %article="Le/La" %upname="Name on screen" %badge="0" %icon="9,9" %req="gold:earned>=1" %req0="gold:earned>=(1" %target="nobuild" %target1="nobuild" %target2="nobuild" %target3="nobuild" %target4="nobuild" %target5="nobuild" %target6="nobuild" %res1="gold" %res2="gold" %res3="gold" %res4="gold" %res5="gold" %cost1="0" %cost2="0" %cost3="0" %cost4="0" %cost5="0" %desc="Augmente les productions de vos Target" %eff="Production de r1 x f1<.>Production de r2 + f2 *(ethermulti)*(1+(floor(this/25))/4)" %r1="gold" %f1="1" %ra1="gold" %fa1="1" %rb1="gold" %fb1="1" %rc1="gold" %fc1="1" %rd1="gold" %fd1="1" %re1="gold" %fe1="1" %rf1="gold" %ff1="1" %r2="gold" %f2="0" %txt="ownedUpgradetxt"
 				*TEMPLATE
 					on click:anim glow
 					tags:[%tagbase] [%tag]
@@ -278,7 +300,7 @@ Includes
 					req:([%req0]*333)) and (have [%name]plus8)
 //Upgrade cost *3, A copier :
 //Upgrades
-//[i:up3 %name="upgradename" %article="Le/La" %upname="Name on screen" %badge="0" %icon="9,9" %req0="gold:earned>=(1" %target="Ce qui vas être boosté" %res1="gold" cost1="coût de base" cost11="coût de base x3" %desc="Phrase d'intro" %eff="Boost les productions de r1 x f1<.>Boost les productions de r2 + f2" r1="gold" %f1="1"]
+//[i:up3 %name="upgradename" %article="Le/La" %upname="Name on screen" %badge="0" %icon="9,9" %req0="gold:earned>=(1" %target="Ce qui vas être boosté" %res1="gold" cost1="coût de base" cost11="coût de base x3" %desc="Phrase d'intro" %eff="Boost les productions de r1 x f1 *(ethermulti)*(1+(floor(this/25))/4)<.>Boost les productions de r2 + f2 *(ethermulti)*(1+(floor(this/25))/4)" r1="gold" %f1="1"]
 		*include up3 %tag="tagname" %tagbase="upgrade" %name="upgradename" %article="Le/La" %upname="Name on screen" %badge="0" %icon="9,9" %req="gold:earned>=1" %req0="gold:earned>=(1" %target="nobuild" %desc="Augmente les productions de vos Target" %eff="Production de r1 x f1<.>Production de r2 + f2" %res1="gold" %res2="gold" %res3="gold" %res4="gold" %res5="gold" %cost1="0" %cost2="0" %cost3="0" %cost4="0" %cost5="0" %r1="gold" %f1="1" %r2="gold" %f2="0" %txt="ownedUpgradetxt" %bost1="0" %bost2="0" %bost3="0" %bost4="0" %bost5="0" 
 				*TEMPLATE
 					on click:anim glow
@@ -394,25 +416,31 @@ Resources
 	*TEMPLATE		
 		class:noBackground
 		show earned
-		tags:resource etheral
+		tags:resource etheral element
 	*gold|golds
 		name:Or
+		text:<b>[this] </b>[?(gold:ps>=1)|<#83d10f>(+[gold:ps]/sec)</#>| ]
 		desc:l'Or, ressource à la base de tout empire. Plus on en a, plus on en a !
 		icon:icons[6,0]
+		tags:resource etheral
 	*earth|earths
 		name:Terre
+		text:<b>[this] </b>[?(earth:ps>=1)|<#83d10f> (+[earth:ps]/sec) </#>| ]
 		desc:La Terre est la voie de la stabilité et du progrès durable.
 		icon:icons[3,0]
 	*fire|fires
 		name:Feu
+		text:<b>[this] </b>[?(fire:ps>=1)|<#83d10f> (+[fire:ps]/sec) </#>| ]
 		desc:Le Feu est l'élément de l'action et de l'énergie.
 		icon:icons[1,0]
 	*water|waters
 		name:Eau
+		text:<b>[this] </b>[?(water:ps>=1)|<#83d10f> (+[water:ps]/sec) </#>| ]
 		desc:L'Eau est la voie du calme et du temps qui s'écoule...
 		icon:icons[2,0]
 	*air|airs
 		name:Air
+		text:<b>[this] </b>[?(air:ps>=1)|<#83d10f> (+[air:ps]/sec) </#>| ]
 		desc:L'Air est la voie de la liberté et de la spiritualité
 		icon:icons[0,0]
 //Ressource Special
@@ -423,30 +451,38 @@ Resources
 		hidden when 0	
 	*techno|technos
 		name:Technologie
+		text:<b>[this] </b>[?(techno:ps>=1)|<#83d10f> (+[techno:ps]/sec) </#>| ]
 		desc:la Technologie permet de construire moins chère
 		icon:icons[4,1]
 	*idltime|idltimes
 		name:Unité de Temps|Unités de Temps
+		text:<b>[this]/[(1+(watertemple*(1+waterstatu))*200)] </b>[?(idltime:ps>=1)|<#83d10f> (+[idltime:ps]/sec) </#>| ]
 		desc:Le Temps écoulé sans cliquer.<//><b>Effect:</b><.>Le Maximum est augmenté en fonction du nombre de Temple de l'eau et de Rivière Sacrée<.>les Constructions Basique voie leurs productions augmenter en fonction du Temps Enmagasiné<.>Clicker sur un Bouton vous fait perdre 25% du total
 		icon:icons[4,0]
-		text:Unité de Temps : [this]/[(1+(watertemple*(1+waterstatu))*200)]
-		on tick:if (idltime>=((1+(watertemple*(1+waterstatu))*200))) yield (-1*(idltime-(1+(watertemple*(1+waterstatu))*200))) idltime
 	*fireclick|fireclicks
+		text:<b>[this]</b>[?(fireclick:ps<=-1)|<#d1460f> ([fireclick:ps]/sec) </#>| ]
 		name:Click enflamé|Click enflamés		
 		desc:Les clicks enflamés sont un multiplicateur des effets de vos clicks, cette ressource diminue au fur et à mesure.
 		icon:icons[4,2]
 		on tick:yield (-2.5*(fireclicks)/10) fireclick
 	*energie
 		name:Energie
-		desc:Permet d'utiliser les Pouvoirs élémentaires
+		desc:Permet d'utiliser les Pouvoirs élémentaires<//> + [energie:ps] Energie/sec
 		icon:icons[4,4]
-		text:Energie : [this]/[maxenergie]
+		text:[energie][?(maxenergie>=101)|/[maxenergie]| ] 
 		tag:special
 	*karma
 		name:Point de Karma
 		desc:Lié aux réincarnations, les Points de Karma peuvent être dépensé dans le Karmashop
 		icon:icons[4,5]
 		tags:keep karmatxt0 view4
+	*ether
+		name:Ether
+		desc:<b>Effect:</b><.>Production Total : [(ethermulti*100)] %
+		icon:icons[4,3]
+		tags:special keep
+		is always:(etherium)
+		hidden when 0
 //Statistiques	
 	*TEMPLATE
 		class:noBackground
@@ -473,24 +509,26 @@ Resources
 //Ressource Hidden
 	*TEMPLATE
 		hidden
+	*idltimemax
+		is always:(1+(watertemple*(1+waterstatu))*200)
 	*nclick|nclicks
 		name:Click
 		is always:(clickgold+clickfire+clickearth+clickwater+clickair)
 	*none
 	*clickgold
-		is always:(goldButton:clicks-amountclickgold)
+		is always:(goldButton:clicks-amountclickgold+autoclickgold)
 	*amountclickgold
 	*clickfire
-		is always:(fireButton:clicks-amountclickfire)
+		is always:(fireButton:clicks-amountclickfire+autoclickfire)
 	*amountclickfire
 	*clickearth
-		is always:(earthButton:clicks-amountclickearth)
+		is always:(earthButton:clicks-amountclickearth+autoclickearth)
 	*amountclickearth
 	*clickwater
-		is always:(waterButton:clicks-amountclickwater)
+		is always:(waterButton:clicks-amountclickwater+autoclickwater)
 	*amountclickwater
 	*clickair
-		is always:(airButton:clicks-amountclickair)
+		is always:(airButton:clicks-amountclickair+autoclickair)
 	*amountclickair
 	*goldamount
 		tags:keep
@@ -531,6 +569,25 @@ Buttons
 		on click:if (have airprod and chance(10%)) yield 2 air
 		on click:if (have fireprod and chance(10%)) yield 2 fire
 		on click:if (have waterprod and chance(10%)) yield 2 water
+		on tick:
+			if (autoXgold>=1)
+				anim icon wobble
+				yield (-1*autoXhit) amountclickgold
+				yield (2*autoXhit) gold
+				if (have earthprod and chance 10%) yield (2*autoXhit) earth
+				if (have airprod and chance 10%) yield (2*autoXhit) air
+				if (have fireprod and chance 10%) yield (2*autoXhit) fire
+				if (have waterprod and chance 10%) yield (2*autoXhit) water
+				if (chance(10%)) yield 10 gold
+				yield (firetemple*(autoXhit)) fireclick
+				if (chance((1+peleTouchplus*2)%))
+					yield (autoXhit) fire 
+					yield (autoXhit) earth 
+					yield (autoXhit) water  
+					yield (autoXhit) air
+				end
+			end
+		end
 	*earthButton
 		name:La voie de la Terre.
 		desc:La Terre est l'élément de la stabilité et du progrès durable.<//><b>Effect:</b><.>Clické [clickearth] fois<.>[(10+peleTouchplus*2)] % de chance d'optenir l'Elément Terre[?(have earthprod)|<.>+10 % de chance d'optenir l'Elément Terre| ]
@@ -542,13 +599,13 @@ Buttons
 		on click:if (have earthprod and chance(10%)) yield 2 earth
 		on click:if (chance(10+peleTouchplus*2%)) yield 1 earth
 		on tick:
-			if (autoclick>=1)
+			if (autoXearth>=1)
 				anim icon wobble
-				yield (-10*1) amountclickearth
-				yield 10 gold
-				if (have earthprod and chance(10%)) yield 20 earth
-				if (chance(10%)) yield 10 earth
-				yield (firetemple*10) fireclick
+				yield (-1*(autoXhit)) amountclickearth
+				yield (autoXhit) gold
+				if (have earthprod and chance(10%)) yield (2*autoXhit) earth
+				if (chance(10%+peleTouchplus*2%)) yield (autoXhit) earth
+				yield (firetemple*(autoXhit)) fireclick
 			end
 		end
     *fireButton
@@ -561,6 +618,16 @@ Buttons
 		end
         on click:if (chance(10+peleTouchplus*2%)) yield 1 fire
 		on click:if (have fireprod and chance(10%)) yield 2 fire
+		on tick:
+			if (autoXfire>=1)
+				anim icon wobble
+				yield (-1*(autoXhit)) amountclickfire
+				yield (autoXhit) gold
+				if (have fireprod and chance(10%)) yield (2*autoXhit) fire
+				if (chance(10%+peleTouchplus*2%)) yield (autoXhit) fire
+				yield (firetemple*(autoXhit)) fireclick
+			end
+		end
     *waterButton
         name:Le Tranquilité de l'Eau
         desc:l'Eau est l'élément du calme et du temps qui s'écoule ...<//><b>Effect:</b><.>Clické [clickwater] fois<.>[(10+peleTouchplus*2)] % de chance d'optenir l'Elément Eau[?(have waterprod)|<.>+10 % de chance d'optenir l'Elément Eau| ]
@@ -570,7 +637,17 @@ Buttons
 			yield 1 gold
 		end
 		on click:if (have waterprod and chance(10%)) yield 1 water
-        on click:if (chance(10+peleTouchplus*2%)) yield 1 water
+        on click:if (chance(10+peleTouchplus*2%)) yield 2 water
+		on tick:
+			if (autoXwater>=1)
+				anim icon wobble
+				yield (-1*(autoXhit)) amountclickwater
+				yield (autoXhit) gold
+				if (have waterprod and chance(10%)) yield (2*autoXhit) water
+				if (chance(10%+peleTouchplus*2%)) yield (autoXhit) water
+				yield (firetemple*(autoXhit)) fireclick
+			end
+		end
     *airButton
         name:La Simplicité de l'Air
         desc:L'Air est l'élément de la liberté et de la spiritualité<//><b>Effect:</b><.>Clické [clickair] fois<.>Ce bouton ne produit pas d'Or<.>Ce Bouton Produit de l'Air
@@ -580,6 +657,16 @@ Buttons
 			yield (0.4+peleTouchplus/3) air
 		end	
 		on click:if (have airprod) yield 0.6 air
+		on tick:
+			if (autoXair>=1)
+				anim icon wobble
+				yield (-1*(autoXhit)) amountclickair
+				yield (autoXhit) gold
+				if (have airprod and chance(10%)) yield (2*autoXhit) air
+				if (chance(10%+peleTouchplus*2%)) yield (autoXhit) air
+				yield (firetemple*(autoXhit)) fireclick
+			end
+		end
 	*TEMPLATE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Upgrades en Lien avec Les Boutons ou les Clicks ICI
@@ -804,16 +891,24 @@ Buildings
 		desc:Cascade fontaine et salle de méditation<//><b>Effect:</b><.>Production : [(idltime/60)*max(1,(pwatertempleplus*2))*(ethermulti)*(1+(floor(this/25))/4)] Or/sec & [max(1,(pwatertempleplus*2))*(ethermulti)*(1+(floor(this/25))/4)] unité de Temps/sec<.>Production Total : [((idltime/60)*watertemple*max(1,(pwatertempleplus*2)))*(ethermulti)*(1+(floor(this/25))/4)] Or/sec & [(watertemple)*max(1,(pwatertempleplus*2))*(ethermulti)*(1+(floor(this/25))/4)] unité de Temps/sec
 		icon:icons[2,4]
 		cost:4000 gold, 50 water
-		on tick:yield 1 idltime
+		on tick:if (idltime<idltimemax) yield 1 idltime
+		on tick:if (idltime>idltimemax) yield -1 idltime
 		on tick:yield (idltime/60) golds
 		req:have waterway
 	*waterstatu|waterstatus
-		name:La Rivière Sacrée
-		desc:La rivière sacré cache en elle la Magie de l'Eau<//><b>Effect:</b><.>Produit quelques Elements Eau<.>Production : [(2-(2/idltime))*(idltime/10000)*(ethermulti)*(1+(floor(this/25))/4)] Eau/sec<.>Production Total : [((2-(2/idltime))*(idltime/10000)*waterstatu)*(ethermulti)*(1+(floor(this/25))/4)] Eau/sec
+		name:Rivière Sacrée
+		desc:La rivière est une source d'eau intarrissable<//><b>Effect:</b><.>Produit quelques Elements Eau et augmente le Maximum d'Unitée de Temps<.>Production : [(2-(2/idltime))*(idltime/10000)*(ethermulti)*(1+(floor(this/25))/4)] Eau/sec<.>Production Total : [((2-(2/idltime))*(idltime/10000)*waterstatu)*(ethermulti)*(1+(floor(this/25))/4)] Eau/sec
 		icon:icons[2,5]
 		cost:100 idltime,140000 gold, 1000 water
-		on tick:yield (2-(1/idltime))*(idltime/10000) water
+		on tick:yield (3-(3/idltime))*(idltime/10000) water
 		req:watertemples>=20
+	*watermagie
+		name:Cité Atlante
+		desc:Les Citées Atlantes cachent en elle la Magie de l'Eau
+		icon:icons[2,6]
+		cost:888888 gold, 5000 water
+		on tick:yield 1 energie
+		req:waterstatu>=10
 	*TEMPLATE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Resources
@@ -839,7 +934,7 @@ Upgrades
 		req:100 water:earned, no earthway, no fireway, no airway, 20 clickwater
 		tags:specialisation sperwater
 		on click:
-				hide tag:specialisation
+				hide tag:specialisation:owned
 		end
 	*waterprod
 		name:Chance de l'Eau
@@ -884,6 +979,13 @@ Buildings
 		on tick:yield (-1*1) amountclickfire
 		on tick:if (chance(5%)) yield 1 fire
 		req:firetemple>=20
+	*firemagie
+		name:Fort de Guerre
+		desc:C'est dans les Fort de Guerre que l'on forme les Hérudits du Feu à la Maitrise
+		icon:icons[1,6]
+		cost:1000000 gold, 3000 fire
+		on tick:yield ((-1*fireclick:ps)/200) energie
+		req:firestatu>=10
 	*TEMPLATE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Upgrades			
@@ -904,7 +1006,7 @@ Upgrades
 		req:100 fire:earned, no earthway, no waterway, no airway, 20 clickfire
 		tags:specialisation sperfire
 		on click:
-				hide tag:specialisation
+				hide tag:specialisation:owned
 		end
 	*fireprod
 		name:Chance du Feu
@@ -972,7 +1074,7 @@ Upgrades
 		req:100 earth:earned, no waterway, no fireway, no airway, 20 clickearth
 		tags:specialisation sperearth
 		on click:
-				hide tag:specialisation
+				hide tag:specialisation:owned
 		end
 	*earthprod
 		name:Chance de la Terre
@@ -1039,14 +1141,14 @@ Buildings
 	*transfo3
 		name:Transformateur Energétique
 		icon:icons[3,7]
-		desc:Transforme les Unités de Technologie en Energie<//><b>Effect:</b><.>+ [(((transfo3)*(transfo3))/2)*max(1,(ptransfoplus*(1+((transfo+transfo2+transfo3)/75))))*(1+(floor(this/25))/4)] Max Energie<.>Production : [1] Energie/sec<.>Production Totale : [(transfo3)*max(1,(ptransfoplus*(1+((transfo+transfo2+transfo3)/75))))*(1+(floor(this/25))/4)] Energie/sec<.>-[(transfo3)] Technologie/sec
+		desc:Transforme les Unités de Technologie en Energie<//><b>Effect:</b><.>+ [(((transfo3)*(transfo3))/2)*max(1,(ptransfoplus*(1+((transfo+transfo2+transfo3)/75))))*(1+(floor(this/25))/4)] Max Energie<.>Production : [0.1*max(1,(ptransfoplus*(1+((transfo+transfo2+transfo3)/75))))*(1+(floor(this/25))/4)] Energie/sec<.>Production Totale : [(0.1*transfo3)*max(1,(ptransfoplus*(1+((transfo+transfo2+transfo3)/75))))*(1+(floor(this/25))/4)] Energie/sec<.>-[(transfo3)] Technologie/sec
 		req:earthstatu>=10
 		cost:1500 techno
 		cost increase:109%
 		on tick:
 			if (((techno)>=(transfo+transfo2+transfo3)) and ((energie)<=(maxenergie)))
 				yield -1 techno
-				yield 1 energie
+				yield 0.1 energie
 			else
 				yield 0.1 techno
 			end
@@ -1063,7 +1165,7 @@ Upgrades
 		on click:anim glow
 		tags:specialisation
 		on click:
-				hide tag:specialisation
+				hide tag:specialisation:owned
 		end
 		no text
 		class:smallThing thing
@@ -1121,7 +1223,7 @@ Upgrades
 		req:100 air:earned, no earthway, no fireway, no waterway, 20 clickair
 		tags:specialisation sperair
 		on click:
-				hide tag:specialisation
+				hide tag:specialisation:owned
 		end
 	*airprod
 		name:Chance de l'Air
@@ -1139,202 +1241,22 @@ Upgrades
 		cost:100 air
 		req:600 air:earned
 	*TEMPLATE
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-				//Magie, ICI tout ce qui est en Rapport avec les Pouvoirs ! Spell
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Resources 		
-// Gestion du mana, des Cooldown etc c'est ICI
-	*TEMPLATE
-		hidden
-	*maxenergie
-		is always:100+((transfo3)*(transfo3))/2
-	*autoclick
-		on tick:yield -1 autoclick
-	*delayprodx
-		on tick:
-			if (have transfope3)
-			yield -1.5 delayprodx
-			else
-			yield -1 delayprodx
-			end
-		end
-	*delayprodx2
-		on tick:
-			if (have transfope3)
-			yield -1.5 delayprodx2
-			else
-			yield -1 delayprodx2
-			end
-		end
-	*delayautox
-		on tick:
-			if (have transfope3)
-			yield -1.5 delayautox
-			else
-			yield -1 delayautox
-			end
-		end
-	*delayprodx3
-		on tick:
-			if (have transfope3)
-			yield -1.5 delayprodx3
-			else
-			yield -1 delayprodx3
-			end
-		end
-	*delaytimeiswater1
-		on tick:yield -1 delaytimeiswater1
-	*TEMPLATE
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Upgrades 		
-//Les Spells ! Les Pouvoirs ! Les Sortilèges ! Les Capacités Spécials etc...
-	*TEMPLATE
-		on click:anim glow
-		on click:anim icon wobble
-		tag:spell
-		no text
-		no buy
-		class:noBackground
-	*timeiswater
-		name:Le Temps c'est de l'Eau
-		icon:icons[2,2]
-		on click:
-			$cost=(idltime/4)
-			if (delaytimeiswater1=0)
-				yield -$cost idltime
-				yield ($cost*2) water
-				toast Vous avez gagné [($cost*2)] Eau.
-				yield 60 delaytimeiswater1
-			else
-				toast Attendez [delaytimeiswater1] secondes.
-			end
-		end
-		desc:Produit de l'Eau en consommant du Temps <//><b>Effect:</b><.> Delay : [delaytimeiswater1] sec<.>Coût : [(idltime/4)] Unitées de Temps<.>Gains : [((idltime/4)*2)] Eau
-		req:waterstatu>=5
-				
-	*prodx
-		name:Boost 60 Secondes
-		icon:icons[9,2]
-		on click:
-			$cost=50
-			if (delayprodx=0)
-				if (energie>=$cost)
-					yield -$cost energie
-					yield (60*golds:ps) golds
-					yield (60*technos:ps) technos
-					yield (60*earths:ps) earths
-					yield (60*fires:ps) fires
-					yield (60*waters:ps) waters
-					yield (60*airs:ps) airs
-					toast Vous avez gagnez 60 sec de vos productions
-					yield 40 delayprodx
-				else if (energie<$cost)
-					toast vous n'avez pas assez d'énergie !
-				else
-					toast BUG !!!
-				end
-			else
-				toast Attendez [delayprodx] secondes.
-			end
-		end			
-		desc:Produit 60 secondes de toutes les productions<//><b>Effect:</b><.> Delay : [delayprodx] sec<.>cost : 50 Energie
-		req:102 maxenergie
-	*autox
-		name:Auto Click Terre 30 sec
-		icon:badges[8,3] icons[9,0]
-		on click:
-			$cost=100
-			if (delayautox=0)
-				if (energie>=$cost)
-					yield -$cost energie
-					yield 30 autoclick
-					yield 60 delayautox
-				else if (energie<$cost)
-					toast vous n'avez pas assez d'énergie !
-				else
-					toast BUG !!!
-				end
-			else
-				toast Attendez [delayautox] secondes.
-			end
-		end			
-		desc: Click 1x par Seconde pendant 30 secondes.<//><b>Effect:</b><.> Delay : [delayautox] sec<.>cost : 100 Energie
-		req:120 maxenergie
-	*prodx2
-		name:Big Boost
-		icon:badges[8,3] icons[9,2]
-		on click:
-			$cost=(buildingtxts)
-			if (delayprodx2=0)
-				if (energie>=$cost)
-					yield -$cost energie
-					yield (5*(buildingtxts)*golds:ps) golds
-					yield ((buildingtxts)*technos:ps) technos
-					yield ((buildingtxts)*earths:ps) earths
-					yield ((buildingtxts)*fires:ps) fires
-					yield ((buildingtxts)*waters:ps) waters
-					yield ((buildingtxts)*airs:ps) airs
-					toast Vous avez gagnez [buildingtxts] sec de vos production
-					yield 120 delayprodx2
-				else if (energie<$cost)
-					toast vous n'avez pas assez d'énergie !
-				else
-					toast BUG !!!
-				end
-			else
-				toast Attendez [delayprodx2] secondes.
-			end
-		end			
-		desc:Produit [buildingtxts] Secondes de toutes vos productions <//><b>Effect:</b><.> Delay : [delayprodx2] sec<.>cost : [buildingtxts] Energie
-		req:150 maxenergie
-	*prodx3
-		name:Beaucoup d'or
-		icon:icons[6,1]
-		on click:
-			$cost=500+(buildingtxts)
-			if (delayprodx3=0)
-				if (energie>=$cost)
-					yield -$cost energie
-					yield (100*(buildingtxts)*golds:ps) golds
-					toast Vous avez gagnez [(100*(buildingtxts)*golds:ps)] Or
-					yield 120 delayprodx3
-				else if (energie<$cost)
-					toast vous n'avez pas assez d'énergie !
-				else
-					toast BUG !!!
-				end
-			else
-				toast Attendez [delayprodx3] secondes.
-			end
-		end			
-		desc:Vraiment Beaucoup d'Or<//><b>Effect:</b><.> Delay : [delayprodx3] sec<.>cost : 500 Energie
-		req:(maxenergie>=500) and (have transfope3)
-	*TEMPLATE
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Karma Shop
 // Tag List : tag:karmatxt1, tag:karmatxt0, tag:karmatxt2, tag:karmaupgrade:notOwned, tag:karmatxt3, tag:karmabuilding, tag:karmatxt4, tag:karmaupgrade:owned
 Resources
 	*TEMPLATE
-		class:noBackground
 	*karmatxt1
-		tags:karmatxt1 view4
+		tags:karmatxt1 view4 storetxt
 		text:<b>Bienvenu dans le monde entre les mondes</b><//>Ici vous pourez dépensser vos point de Karma pour les changer en Améliorations Psychique qui resterons au travers vos cicles de réincarnation
 	*karmatxt2
-		tags:karmatxt2 view4
+		tags:karmatxt2 view4  storetxt
 		text:<b>Améliorations Karmique disponibles</b>
 	*karmatxt3
-		tags:karmatxt3 view4
+		tags:karmatxt3 view4 storetxt
 		text:<b>Entitées Karmiques</b>
 	*karmatxt4
-		tags:karmatxt4 view2
+		tags:karmatxt4 view2 storetxt
 		text:<b>Améliorations Karmique Obtenue</b>
-		hidden when 0
-	*ether
-		name:Ether
-		desc:<b>Effect:</b><.>Production Total : [(ethermulti*100)] %
-		icon:icons[4,3]
-		tags:special keep
-		is always:(etherium)
 		hidden when 0
 	[i:prodid %id="etherniteplus"]
 	*ethermulti
@@ -1368,29 +1290,37 @@ Buildings
 		desc:l'Avatar de L' Eau vous concède son pouvoir<//><b>Effect:</b><.>Pour Chaque Niveau, obtenez [10*ethermulti] de Eau à votre renaissance<.>[10*ethermulti*wateravatar] Eau au Départ
 		cost:10 karma
 		icon:badges[8,1] badges[9,0] icons[4,6]
-		req:(karma:earned>=1000) and (water:earned>=1e10)
+		req:(karma:earned>=1000) and (water:earned>=1e9)
 		cost increase:115%	
 	*earthavatar
 		name:Avatar de la Terre
 		desc:l'Avatar de la Terre vous concède son pouvoir<//><b>Effect:</b><.>Pour Chaque Niveau, obtenez [10*ethermulti] de Terre à votre renaissance<.>[10*ethermulti*earthavatar] Terre au Départ
 		cost:10 karma
 		icon:badges[8,3] badges[9,0] icons[4,6]
-		req:(karma:earned>=1000) and (earth:earned>=1e10)
+		req:(karma:earned>=1000) and (earth:earned>=1e9)
 		cost increase:115%	
 	*fireavatar
 		name:Avatar du Feu
 		desc:l'Avatar du Feu vous concède son pouvoir<//><b>Effect:</b><.>Pour Chaque Niveau, obtenez [10*ethermulti] de Feu à votre renaissance<.>[10*ethermulti*fireavatar] Feu au Départ
 		cost:10 karma
 		icon:badges[8,2] badges[9,0] icons[4,6]
-		req:(karma:earned>=1000) and (fire:earned>=1e10)
+		req:(karma:earned>=1000) and (fire:earned>=1e9)
 		cost increase:115%	
 	*airavatar
 		name:Avatar de l'Air
 		desc:l'Avatar de l'Air vous concède son pouvoir<//><b>Effect:</b><.>Pour Chaque Niveau, obtenez [10*ethermulti] de Air à votre renaissance<.>[10*ethermulti*airavatar] Air au Départ
 		cost:10 karma
 		icon:badges[8,0] badges[9,0] icons[4,6]
-		req:(karma:earned>=1000) and (air:earned>=1e10)
+		req:(karma:earned>=1000) and (air:earned>=1e9)
 		cost increase:115%
+	*magieavatar
+		name:Avatar de l'Energie
+		desc: Produit 1 Energie/sec
+		cost:100 karma
+		cost increase:170%
+		req:karma:earned>=1
+		on tick:yield 1 energie
+		
 		
 Upgrades
 	[i:up10 %tagbase="karmaupgrade" %tag="keep view4" %name="ethernite" %upname="Ether ni T" %badge="0" %icon="4,3" %req="etherium>=7" %target="nobuild" %cost1="3" %res1="karma" %cost2=",0" %res2="karma" %cost3=",0" %res3="karma" %cost4=",0" %res4="karma" %desc="Augmente l'efficassité de l'Ether de 1%" %eff="Production Total : [100+(ether*(10+petherniteplus))] %" %r1="gold" %f1="1" %r2="gold" %f2="0" %txt="karmatxt4"%article="L'" %req0="(karma:earned)>=(10"]
@@ -1513,4 +1443,527 @@ Upgrades
 	[i:buildcount %building="waterstatu"]
 	[i:buildcount %building="airtemple"]
 	[i:buildcount %building="airstatu"]
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+				//Magie, ICI tout ce qui est en Rapport avec les Pouvoirs ! Spell
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Resources 		
+// Gestion du mana, des Cooldown etc c'est ICI
+	*TEMPLATE
+		hidden
+	*maxenergie
+		is always:(100+(((transfo3)*(transfo3))/2)+(watermagie)*(watermagie)+(magieavatar*2))
+	*autoXtxt
+		tags:storetxt autoXtxt, view5, spelltxt2
+		text:Automatron :
+	*acceltxt
+		tags:storetxt acceltxt, view5, spelltxt2
+		text:Acceleratron :
+	*boostXtxt
+		tags:storetxt boostXtxt, view5, spelltxt2
+		text:Multiplicatron :
+	*TEMPLATE
+		tags:menuSpell view5
+	*viewspell1
+		name:Level UP
+		text:Level UP
+		desc:Ici les Améliorations à pourvoir !
+		on click:
+			show tag:view6
+			show tag:spellup:notOwned
+			hide tag:acceltxt
+			hide tag:accelup:owned
+			show tag:accelup:notOwned
+			show tag:autoXup:notOwned
+			hide tag:autoXup:owned
+			hide tag:autoXtxt
+			show tag:boostXup:notOwned
+			hide tag:boostXup:owned
+			hide tag:boostXtxt
+		end
+	*viewspell2
+		name:Augmentations
+		text:Augmentations
+		desc:Ici les choix qui ont été fait !
+		on click:
+			show tag:view6
+			hide tag:spellup
+			show tag:acceltxt
+			show tag:accelup:owned
+			hide tag:accelup:notOwned
+			show tag:autoXup:owned
+			hide tag:autoXup:notOwned
+			show tag:autoXtxt
+			show tag:boostXup:owned
+			hide tag:boostXup:notOwned
+			show tag:boostXtxt
+		end
+	*TEMPLATE
+Includes
+	*include lvlcounter %name="powername" %upname="Name on screen" %icon="0"
+				*TEMPLATE 
+					tags:spellup view5
+					class:Thing smallThing
+					cost:1 energie
+					on earn:hide this
+					no text
+					on click:lose energie
+					desc:Attetion coûte toute votre Energie !
+				*[%name]lvl1
+					name:[%upname] Niveau 3 ! Yeah
+					icon:badges[0,0] icons[9,[%icon]]
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=3
+				*[%name]lvl2
+					icon:badges[0,1] icons[9,[%icon]]
+					name:[%upname] Niveau 6 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=6
+				*[%name]lvl3
+					icon:badges[0,2] icons[9,[%icon]]
+					name:[%upname] Niveau 9 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=9
+				*[%name]lvl4
+					icon:badges[0,3] icons[9,[%icon]]
+					name:[%upname] Niveau 12 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=12
+				*[%name]lvl5
+					icon:badges[0,4] icons[9,[%icon]]
+					name:[%upname] Niveau 15 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=15
+				*[%name]lvl6
+					icon:badges[0,5] icons[9,[%icon]]
+					name:[%upname] Niveau 18 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=18
+				*[%name]lvl7
+					icon:badges[0,6] icons[9,[%icon]]
+					name:[%upname] Niveau 21 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=21
+				*[%name]lvl8
+					icon:badges[0,7] icons[9,[%icon]]
+					name:[%upname] Niveau 25 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=25
+				*[%name]lvl9
+					icon:badges[0,8] icons[9,[%icon]]
+					name:[%upname] Niveau 30 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=30
+				*[%name]lvl10
+					icon:badges[0,9] icons[9,[%icon]]
+					name:[%upname] Niveau 33 ! Yeah
+					on earn:yield (random(1,15)) [%name]choice1
+					on earn:yield (random(1,15)) [%name]choice2 
+					on earn:yield (random(1,15)) [%name]choice3 
+				req:[%name]lvl>=33
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Automatron !!
+Resources
+	*TEMPLATE
+		hidden
+	*autoXlvl
+	*autoXP
+	*autoXUP
+	*autoXdelay
+		on tick:
+			if (have transfope3)
+			yield -1.5 autoXdelay
+			else
+			yield -1 autoXdelay
+			end
+		end
+	*autoXcost
+		is always:(50+10*autoXlvl*autoXlvl)
+	*autoXtarget
+	*autoXhit
+		is always:(2+autoXlvl*2)
+	*autoXtime
+		is always:(10+1*autoXlvl)
+	*autoXgold
+		on tick:
+			yield -1 autoXgold
+		end
+	*autoXearth
+		on tick:
+			yield -1 autoXearth
+		end
+	*autoXfire
+		on tick:
+			yield -1 autoXfire
+		end
+	*autoXwater
+		on tick:
+			yield -1 autoXwater
+		end
+	*autoXair
+		on tick:
+			yield -1 autoXair
+		end
+	*autoclickgold
+	*autoclickfire
+	*autoclickearth
+	*autoclickwater
+	*autoclickair
 	
+Upgrades 	
+	*autoX
+		on click:anim glow
+		on click:anim icon wobble
+		tag:spell Spell view6
+		no buy
+		name:Automatron !
+		icon:icons[9,0]
+		on click:
+			if (autoXtarget=0) yield 1 autoXtarget
+			if (autoXdelay=0)
+				if (energie>=autoXcost)
+					yield (-1*autoXcost) energie
+					yield 10 autoXdelay
+					yield 1 autoXP
+						if (autoXtarget=1)
+							yield (autoXtime) autoXgold
+							yield 0 autoclickgold
+						end
+						if (autoXtarget=2)
+							yield (autoXtime) autoXearth
+							yield 0 autoclickearth
+						end
+						if (autoXtarget=3)
+							yield (autoXtime) autoXfire
+							yield 0 autoclickfire
+						end
+						if (autoXtarget=4)
+							yield (autoXtime) autoXwater
+							yield 0 autoclickwater
+						end
+						if (autoXtarget=5)
+							yield (autoXtime) autoXair
+							yield 0 autoclickair
+						end
+				else if (energie<autoXcost)
+					toast vous n'avez pas assez d'énergie !
+				else
+					toast BUG !!!
+				end
+			else
+				toast Attendez [autoXdelay] secondes.
+			end
+		end	
+		on click:
+			if (autoXP>=autoXUP)
+				yield -1*(autoXUP) autoXP
+				yield 1 autoXlvl
+				yield 1 autoXUP
+			end
+		end
+		desc:Click [autoXhit]x par Seconde pendant [autoXtime] secondes.<//><b>Coût :</b> [autoXcost] Energie<//><b>Delay :</b> [autoXdelay] sec<//><b>Effect:</b>[?(autoXtarget<=1)|<.> Click [autoXhit] fois/sec sur "De l'Or" pendant [autoXtime] secondes| ][?(autoXtarget=2)|<.> Click [autoXhit] fois/sec sur "La Voie de La Terre" pendant [autoXtime] secondes| ][?(autoXtarget=3)|<.> Click [autoXhit] fois/sec sur "L'action du Feu" pendant [autoXtime] secondes| ][?(autoXtarget=4)|<.> Click [autoXhit] fois/sec sur "La Tranquilité de l'Eau" pendant [autoXtime] secondes| ][?(autoXtarget=5)|<.> Click [autoXhit] fois/sec sur "Le Ventilateur" pendant [autoXtime] secondes| ]<//><b>Niveau : <#fff47a>[autoXlvl]</#></b><//>Encore [autoXUP-autoXP] utilisation pour monter de niveau.
+		text:<b>Coût :</b> [autoXcost] Energie<//><b>Delay :</b> [autoXdelay] sec
+		req:(maxenergie>=102) or (firemagie>=1)
+	*TEMPLATE
+	
+Resources
+	*autoXchoice1
+	*autoXchoice2
+	*autoXchoice3
+	*autoX14onoff
+	*TEMPLATE
+Upgrades
+	[i:lvlcounter %name="autoX" %upname="Automatron"]
+	*autoX1
+		req:(autoXchoice1=1 or autoXchoice2=1 or autoXchoice3=1)
+		
+		
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Acceleration !!
+Resources
+	*TEMPLATE
+		hidden
+	*accellvl
+	*accelXP
+	*accelUP
+	*acceldelay
+	*acceltimemod
+		on tick:
+			if (have transfope3)
+			yield -1.5 acceldelay
+			else
+			yield -1 acceldelay
+			end
+		end
+	*acceltime
+		is always: ((30+accellvl*10)*(1+acceltimemod))
+	*accelcost
+		is always: (100+accellvl*accellvl*10)
+
+	
+Upgrades 		
+	*TEMPLATE
+		on click:anim glow
+		on click:anim icon wobble
+		tag:spell Spell view6
+		no buy
+		
+	*accel
+		name:Acceleratron!
+		icon:icons[9,2]
+		on click:
+			if (acceldelay>=1)
+				toast Attendez [acceldelay] secondes.
+			else if (((acceldelay)=(0)) and ((energie)>=(accelcost)))
+				yield 10 acceldelay
+				yield (-1*accelcost) energie
+				yield 1 accelXP
+				yield (acceltime*golds:ps) gold
+				yield (acceltime*technos:ps) techno
+				yield (acceltime*earths:ps) earth
+				yield (acceltime*fires:ps) fire
+				yield (acceltime*waters:ps) water
+				yield (acceltime*airs:ps) air
+				yield (acceltime*idltime:ps) idltime
+				yield (acceltime*techno:ps) techno
+				yield (acceltime*fireclick/600) fireclick
+				yield 0 autoXP
+				yield 0 boostXP
+				yield 0 autoXdelay
+				yield 0 boostXdelay
+				if (have accel5)
+					if (chance 25%)
+						yield (acceltime*accellvl) fire
+					else if (chance 25%)
+						yield (acceltime*accellvl) earth
+					else if (chance 25%)
+						yield (acceltime*accellvl) water
+					else if (chance 25%)
+						yield (acceltime*accellvl) air
+					end
+				end
+			else if (energie<accelcost)
+				toast vous n'avez pas assez d'énergie !
+			end	
+		end
+		on click:
+			if (accelXP>=accelUP)
+				yield -1*(accelUP) accelXP
+				yield 1 accellvl
+				yield 1 accelUP
+			end
+		end
+		desc:Produit [acceltime] secondes de toutes les productions instantanément<//><b>Coût :</b> [accelcost] Energie<//><b>Delay :</b> [acceldelay] sec<//><b>Effect:</b><.>+ [(acceltime*golds:ps)] golds<.>+ [(acceltime*earths:ps)] earths<.>+ [(acceltime*fires:ps)] fire<.>+ [(acceltime*waters:ps)] water<.>+ [(acceltime*airs:ps)] air[?(idltime>=10)|<.>+ [(acceltime*idltime:ps)] Unité de Temps| ][?(techno>=10)|<.>+ [(acceltime*techno:ps)] Technologie| ][?(fireclick>=10)|<.>+ [(acceltime*fireclick/600)] Click Enflamés| ]<//><b>Niveau : <#fff47a>[accellvl]</#></b><//>Encore [accelUP-accelXP] utilisation pour monter de niveau.
+		text:<b>Coût :</b> [accelcost] Energie<//><b>Delay :</b> [acceldelay] sec
+		req:(maxenergie>=150) or (firemagie>=5)
+	*TEMPLATE
+Resources
+	*accelchoice1
+	*accelchoice2
+	*accelchoice3
+	*accel14onoff
+	*TEMPLATE
+Upgrades
+	[i:lvlcounter %name="accel" %upname="Acceleratron" %icon="2"]	
+	*TEMPLATE
+		tags:accelup view4
+		class:Thing smallThing
+		icon:badges[9,0] icons[9,2]
+		no text
+		cost:50 energie
+		on earn:lose accelchoice1
+		on earn:lose accelchoice2 
+		on earn:lose accelchoice3
+		on earn:hide tag:accelup:notOwned
+		on earn:hide this
+	*accel1
+		req:(accelchoice1=1 or accelchoice2=1 or accelchoice3=1)
+		passive:multiply tag:etheral yield of accel by (buildingtxt/10)
+		desc:Les Gains de l'Acceleratron sont augmenté en fonction du nombre de Constructions que vous avez.
+		name:Le nombre fait la force !
+	*accel2
+		req:(accelchoice1=2 or accelchoice2=2 or accelchoice3=2)
+		passive:multiply tag:etheral yield of accel by (star/10)
+		desc:Les Gains de l'Acceleratron sont augmenté en fonction du nombre d'Achievements que vous avez débloqué.
+		name:L'Etofe d'une Star !
+	*accel3
+		req:(accelchoice1=3 or accelchoice2=3 or accelchoice3=3)
+		passive:multiply tag:etheral yield of accel by (ether*ether)
+		desc:Les Gains de l'Acceleratron sont augmenté en fonction de l'Ether que vous avez possédez.
+		name:L'Empire Etherique!
+	*accel4
+		req:(accelchoice1=4 or accelchoice2=4 or accelchoice3=4)
+		passive:increase autoXP yield of accel by 1
+		passive:increase boostXP yield of accel by 1
+		desc:Quand vous utilisez l'Acceleratron, Gagnez 1 point d'expérience pour les autres pouvoirs.
+		name:La Puissance des autres !
+	*accel5
+		req:(accelchoice1=5 or accelchoice2=5 or accelchoice3=5)
+		desc:Quand vous utilisez l'Acceleratron, vous Gagnez un Lot d'un élément au hasard.
+		name:La chance du débutant !
+	*accel6
+		req:(accelchoice1=6 or accelchoice2=6 or accelchoice3=6)
+		passive:increase autoXdelay yield of accel by (-1*accellvl)
+		passive:increase boostXdelay yield of accel by (-1*accellvl)
+		desc:Quand vous utilisez l'Acceleratron, réduisez le delay des autres sorts.
+		name:Vite autre chose !
+	*accel7
+		req:(accelchoice1=7 or accelchoice2=7 or accelchoice3=7)
+		passive:increase gold yield of accel by ((max(1,(2*pfilonspeplus))*max(1,3*pfilonplus)*filon*0.1*(1+(idltime/60))*(ethermulti)*max(1,(pidltimeeffiplus*(1+(idltime/1200))))*(1+(floor(filon/25))/4))*acceltime*4)
+		passive:increase water yield of accel by ((0.5*max(1,(2*pfilonspeplus))*filon)*(ethermulti)*(1+(floor(filon/25))/4)*acceltime*4)
+		desc:Quand vous utilisez l'Acceleratron, Gagnez [(4*acceltime)] fois la productions /sec des Filons.
+		name:Filon Plus vite que ça !
+	*accel8
+		req:(accelchoice1=8 or accelchoice2=8 or accelchoice3=8)
+		passive:increase gold yield of accel by ((max(1,(2*pmineaspeplus))*max(1,(2*pmineaplus))*minea*(1+(idltime/60)))*max(1,(pidltimeeffiplus*(1+(idltime/1200))))*(ethermulti)*(1+(floor(minea/25))/4)*acceltime*4)
+		passive:increase earth yield of accel by ((max(1,(2*pmineaspeplus))*minea)*(ethermulti)*(1+(floor(minea/25))/4)*acceltime*4)
+		desc:Quand vous utilisez l'Acceleratron, Gagnez [(4*acceltime)] fois la productions /sec des Mines Abandonnées.
+		name:Vous avez bonne Mine !
+	*accel9
+		req:(accelchoice1=9 or accelchoice2=9 or accelchoice3=9)
+		passive:increase gold yield of accel by (max(1,2*pminebplus)*mineb*10*(1+(idltime/60))*max(1,(pidltimeeffiplus*(1+(idltime/1200))))*max(1,(2*pminebspeplus))*(ethermulti)*(1+(floor(mineb/25))/4)*acceltime*4)
+		passive:increase fire yield of accel by ((max(1,(2*pmineaspeplus))*(1-1/(1+fireclick))*mineb)*(ethermulti)*(1+(floor(mineb/25))/4)*acceltime*4)
+		desc:Quand vous utilisez l'Acceleratron, Gagnez [(4*acceltime)] fois la productions /sec des Exploitations.
+		name:Exploitant Exploitante je vous ai compris !
+	*accel10
+		req:(accelchoice1=10 or accelchoice2=10 or accelchoice3=10)
+		passive:multiply yield of accel by 2
+		passive:multiply acceldelay yield of accel by (1/2)
+		desc:Cette amélioration double l'effet de toutes les autres améliorations de l'Acceleratron.
+		name:A la une, A la...
+	*accel11
+		req:(accelchoice1=11 or accelchoice2=11 or accelchoice3=11)
+		on earn:yield 1 acceltimemod
+		name:On prend le Temps
+		desc:l'Acceleratron gagne maintenant 2x plus de temps de Production
+	*accel12
+		req:(accelchoice1=12 or accelchoice2=12 or accelchoice3=12)
+		passive:multiply techno yield of accel by (transfo+transfo2+transfo3)
+		passive:multiply fireclick yield of accel by (fireclick)
+		passive:multiply idltime yield of accel by (10)
+		name:Avez vous fait votre choix ?
+		desc:Augmente [?(have fireway)|les Click Enflamés | ][?(have earthway)|la Technologie | ][?(have waterway)|les Unités de Temps | ][?(have airway)|Ventilateurs | ]gagné par l'Acceleratron.
+	*accel13
+		req:(accelchoice1=13 or accelchoice2=13 or accelchoice3=13)
+		passive:multiply energie yield of accel by (1/2)
+		name:Aller moitier prix !
+		desc:Divise le coût de l'Acceleratron par 2
+	*accel14
+		req:(accelchoice1=14 or accelchoice2=14 or accelchoice3=14 or accel14onoff>=1)
+		passive:multiply gold yield of accel by 0
+		passive:multiply tag:element yield of accel by 0
+		passive:multiply tag:special yield of accel by 0
+		passive:multiply energie yield of accel by (-10)
+		on click:lose accel14
+		on earn:yield 1 accel14onoff
+		name:un veritable Red-Bull
+		desc:votre Acceleratron ne Produit plus de ressources à la place, sont delay est divisé par 2 et il produit [(accelcost*10)] energie <//>cette amélioration est désactivable à tout moment
+	*accel15
+		req:(accelchoice1=15 or accelchoice2=15 or accelchoice3=15)
+		passive:multiply gold yield of accel by 100
+		passive:multiply tag:element yield of accel by 0
+		passive:multiply tag:special yield of accel by 0
+		name:GREED !!
+		desc:L'Acceleratron ne boost plus que votre production d'Or
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Boost Production !!
+Resources
+	*TEMPLATE
+		hidden
+	*boostXlvl
+	*boostXP
+	*boostXUP
+	*boostXcost
+		is always:(150+boostXlvl*boostXlvl*10)
+	*boostXdelay
+		on tick:
+			if (have transfope3)
+			yield -1.5 boostXdelay
+			else
+			yield -1 boostXdelay
+			end
+		end
+	*boostXtime
+		is always:(10+boostXlvl*5)
+	*boostXfact
+		is always:(5+boostXlvl/2)
+	*boostXactiv
+		on tick:yield -1 boostXactiv
+Upgrades	
+	*TEMPLATE
+		on click:anim glow
+		tag:spell Spell view6
+		no buy
+	*boostX
+		name:Multiplicatron !
+		icon:icons[9,1]
+		on click:
+			$cost=boostXcost
+			if (boostXdelay=0)
+				if (energie>=$cost)
+					yield -$cost energie
+					yield 10 boostXdelay
+					yield 1 boostXP
+					yield (boostXtime) boostXactiv
+				else if (energie<$cost)
+					toast vous n'avez pas assez d'énergie !
+				else
+					toast BUG !!!
+				end
+			else
+				toast Attendez [boostXdelay] secondes.
+			end
+		end	
+		on tick: 
+			if (boostXactiv>=1) 
+				anim icon wobble
+			end
+		end
+		on click:
+			if (boostXP>=boostXUP)
+				yield -1*(boostXUP) boostXP
+				yield 1 boostXlvl
+				yield 1 boostXUP
+			end
+		end
+		desc:Agmente toutes vos production par [boostXfact]x pendant [boostXtime] sec<//><b>Coût :</b> <#c67aff>[boostXcost]</#> Energie<//><b>Delay :</b> [boostXdelay] sec<//><b>Effect:</b><.>Productions x[boostXfact] pendant [boostXtime] sec[?(boostXactiv>=1)|<.>Encore Actif pendant : [boostXactiv] sec| ]<//><b>Niveau : <#fff47a>[boostXlvl]</#></b><//>Encore [boostXUP-boostXP] utilisation pour monter de niveau.
+		text:<b>Coût :</b> [boostXcost] Energie<//><b>Delay :</b> [boostXdelay] sec
+		req:(maxenergie>=200) or (firemagie>=10)
+	*TEMPLATE
+	*boostZ
+		hidden
+		owned
+		passive:
+			if (boostXactiv>0)
+				multiply tag:etheral yield of :All by (boostXfact)
+			end
+		end
+	*TEMPLATE
+Resources
+	*boostXchoice1
+	*boostXchoice2
+	*boostXchoice3
+	*boostX14onoff
+	*TEMPLATE
+Upgrades
+	[i:lvlcounter %name="boostX" %upname="Multiplicatron" %icon="1"]
+	*TEMPLATE
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
